@@ -205,14 +205,15 @@ def trainModel():
     train_X = np.genfromtxt(train_X_file_path, delimiter=",", skip_header=1)
     train_Y = np.genfromtxt(train_Y_file_path, delimiter=",", skip_header=0, dtype=np.int64)
     train_X, train_Y, val_X, val_Y = trainValSplit(train_X, train_Y)
-    maxDepths= [i for i in range(1,len(train_X[0])+4)]
+    maxDepths= [i for i in range(1,len(train_X[0])+10)]
     minSizes= [i for i in range(len(list(set(train_Y)))+2)]
     maxAcc = 0
     for maxDepth in maxDepths:
+        print(f"maxDepth : {maxDepth}")
         for minSize in minSizes:
             root = buildTree(train_X, train_Y, maxDepth, minSize, 0)
             acc = np.sum(np.array(val_Y) == predict_target_values(val_X, root))/len(val_Y)
-            print(f"curAcc : {acc}, bestAcc : {maxAcc}")
+            print(f"\tminSize : {minSize}, curAcc : {round(acc,3)}, maxAcc : {round(maxAcc,3)}")
             if acc > maxAcc:
                 maxAcc = acc 
                 bestRoot = root
